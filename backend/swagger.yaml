@@ -1,0 +1,134 @@
+openapi: 3.0.0
+info:
+  title: School Vaccination Portal API
+  version: 1.0.0
+  description: |
+    This API manages students, vaccination drives, and vaccination records for a school vaccination portal.
+
+servers:
+  - url: http://localhost:5000
+
+tags:
+  - name: Students
+  - name: Vaccination Drives
+  - name: Vaccination Records
+
+paths:
+  /students:
+    get:
+      tags: [Students]
+      summary: Get all students
+      responses:
+        200:
+          description: List of students
+    post:
+      tags: [Students]
+      summary: Add a new student
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+      responses:
+        201:
+          description: Student added
+
+  /students/{id}:
+    put:
+      tags: [Students]
+      summary: Update student details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+      responses:
+        200:
+          description: Student updated
+
+  /drives:
+    get:
+      tags: [Vaccination Drives]
+      summary: Get all upcoming drives
+      responses:
+        200:
+          description: List of drives
+    post:
+      tags: [Vaccination Drives]
+      summary: Create a vaccination drive
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Drive'
+      responses:
+        201:
+          description: Drive created
+
+  /vaccinations:
+    get:
+      tags: [Vaccination Records]
+      summary: Get all vaccination records
+      responses:
+        200:
+          description: List of vaccination records
+
+    post:
+      tags: [Vaccination Records]
+      summary: Mark a student as vaccinated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VaccinationRecord'
+      responses:
+        201:
+          description: Vaccination recorded
+
+components:
+  schemas:
+    Student:
+      type: object
+      properties:
+        name:
+          type: string
+        class:
+          type: string
+        id:
+          type: string
+        vaccinated:
+          type: boolean
+
+    Drive:
+      type: object
+      properties:
+        vaccine:
+          type: string
+        date:
+          type: string
+          format: date
+        doses:
+          type: integer
+        grades:
+          type: string
+
+    VaccinationRecord:
+      type: object
+      properties:
+        student_id:
+          type: string
+        vaccine:
+          type: string
+        date:
+          type: string
+          format: date
