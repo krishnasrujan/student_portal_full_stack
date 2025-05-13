@@ -1,5 +1,5 @@
 import csv
-import db
+from db import db
 
 from io import StringIO
 from models import Student

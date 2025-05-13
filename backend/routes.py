@@ -1,4 +1,4 @@
-import db
+from db import db
 
 from flask import Blueprint, jsonify, request, abort
 from models import Student, VaccinationDrive, VaccinationRecord

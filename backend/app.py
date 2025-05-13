@@ -3,7 +3,7 @@ from config import get_config
 from db import init_db, db
 from routes import main
 from flasgger import Swagger
-from flask_cors import CORS  
+from flask_cors import CORS
 
 
 def create_app(config_name):
