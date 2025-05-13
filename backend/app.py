@@ -2,12 +2,18 @@ from flask import Flask
 from config import get_config
 from db import init_db, db
 from routes import main
-from flask_cors import CORS  # Import CORS
+from flasgger import Swagger
+from flask_cors import CORS  
 
 
 def create_app(config_name):
     app = Flask(__name__)
     app.config.from_object(get_config())
+
+    # Attach Swagger UI
+    Swagger(app, template_file='swagger.yaml')
+
+
     init_db(app)
     with app.app_context():
         db.create_all()
