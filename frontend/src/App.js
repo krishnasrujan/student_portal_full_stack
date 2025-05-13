@@ -1,45 +1,37 @@
+// src/App.js
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import StudentList from './components/StudentList';
-import AddStudent from './components/AddStudent';
-import EditStudent from './components/EditStudent';
-import DriveList from './components/DriveList';
-import AddDrive from './components/AddDrive';
-import EditDrive from './components/EditDrive';
-import RecordVaccination from './components/RecordVaccination';
-import VaccinationReport from './components/VaccinationReport';
-import ImportStudents from './components/ImportStudents';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+
+import Login from './components/Login';
+import Dashboard from './components/Dashboard';
+import StudentManager from './components/StudentManager';
+import DriveManager from './components/DriveManager';
+import Reports from './components/Reports';
+import Navbar from './components/Navbar';
+
+import { getUserRole } from './utils/auth';
 
 function App() {
-    return (
-        <Router>
-            <div>
-                <nav>
-                    <ul>
-                        <li><Link to="/students">Students</Link></li>
-                        <li><Link to="/students/add">Add Student</Link></li>
-                        <li><Link to="/students/import">Import Students</Link></li>
-                        <li><Link to="/drives">Vaccination Drives</Link></li>
-                        <li><Link to="/drives/add">Add Drive</Link></li>
-                        <li><Link to="/vaccinations/record">Record Vaccination</Link></li>
-                        <li><Link to="/vaccinations/report">Vaccination Report</Link></li>
-                    </ul>
-                </nav>
+  const isLoggedIn = !!getUserRole(); // simulated login check
 
-                <Routes>
-                    <Route path="/students" element={<StudentList />} />
-                    <Route path="/students/add" element={<AddStudent />} />
-                    <Route path="/students/edit/:id" element={<EditStudent />} />
-                    <Route path="/students/import" element={<ImportStudents />} />
-                    <Route path="/drives" element={<DriveList />} />
-                    <Route path="/drives/add" element={<AddDrive />} />
-                    <Route path="/drives/edit/:id" element={<EditDrive />} />
-                    <Route path="/vaccinations/record" element={<RecordVaccination />} />
-                    <Route path="/vaccinations/report" element={<VaccinationReport />} />
-                </Routes>
-            </div>
-        </Router>
-    );
+  return (
+    <Router>
+      {isLoggedIn && <Navbar />}
+      <Routes>
+        {!isLoggedIn ? (
+          <Route path="*" element={<Login />} />
+        ) : (
+          <>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/students" element={<StudentManager />} />
+            <Route path="/drives" element={<DriveManager />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </>
+        )}
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
